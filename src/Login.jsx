@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthButton from '../Buttons/AuthButton';
-import { GlobalStyle, MainContent, FormContainer, FooterText } from '../../GlobalStyles';
+import AuthButton from './Components/Buttons/AuthButton';
+import { GlobalStyle, MainContent, FormContainer, FooterText } from './GlobalStyles';
 
 
 function Login() {

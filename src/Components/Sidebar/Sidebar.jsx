@@ -1,15 +1,17 @@
 import React from 'react'
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const SidebarStyle = styled.div`
   width: 250px;
   background-color: #2c3e50;
   color: #fff;
   padding: 20px;
-  width: 250px;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 0;
 
   h2 {
     font-size: 1.5rem;
@@ -18,7 +20,7 @@ const SidebarStyle = styled.div`
     margin-bottom: 20vh;
   }
 
-  nav{
+  nav {
     justify-self: center;
   }
 
@@ -46,18 +48,17 @@ const SidebarStyle = styled.div`
 function Sidebar() {
   return (
     <SidebarStyle>
-    <h2>Laravel-React</h2>
-        <nav>
-            <ul>
-                <li><a href="/">Login</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="#">CV list</a></li>
-                <li><a href="#">Application</a></li>
-                <li><a href="#">Logout</a></li>
-            </ul>
-        </nav>
+      <h2>Laravel-React</h2>
+      <nav>
+        <ul>
+          <li><Link to="/">Login</Link></li>
+          <li><Link to="/register">Register</Link></li>
+          <li><Link to="/cv/list">CV list</Link></li>
+          <li><Link to="/logout">Logout</Link></li>
+        </ul>
+      </nav>
     </SidebarStyle>
-  )
+  );
 }
 
 export default Sidebar;

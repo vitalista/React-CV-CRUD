@@ -23,6 +23,24 @@ body {
   align-items: flex-start;
   height: 100%;
 }
+
+.flex{
+  display: flex;
+}
+
+.between{
+  justify-content: space-between;
+}
+
+.end{
+  justify-content: end;
+}
+
+a{
+  color: #3498db;
+  text-decoration: none;
+}
+
 `;
 
 const FooterText = styled.div`
