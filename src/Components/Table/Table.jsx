@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const TableStyle = styled.table`
   width: 100%;
@@ -46,29 +48,43 @@ const TableStyle = styled.table`
     width: 100%;
   }
 `;
-
 function Table() {
   const navigate = useNavigate();
-  const [link, setLink] = React.useState("https://ph.jobstreet.com/job/");
-  const [Company, setCompany] = React.useState("Microsoft");
 
-  const handleLinkChange = (event) => {
-    setLink(event.target.value);
-  };
-
-  const handleCompanyChange = (event) => {
-    setCompany(event.target.value);
-  };
-
-  const goToEditCV = () => {
-    navigate("/cv/add");
+  if(localStorage.getItem('token') === null){
+    navigate('/');
   }
 
+  const [cvData, setCvData] = useState([]);
+
+  useEffect(() => {
+    const fetchCvData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/applications',
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+        setCvData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching CV data:", error);
+      }      
+    };
+
+    fetchCvData();
+  }, []); 
+
+  const goToEditCV = (cvId) => {
+    navigate(`/cv/add/${cvId}`);
+  };
+
   return (
-    <TableStyle>
+   <TableStyle>
       <thead>
         <tr>
-          <th>Owner</th>
+          {/* <th>Owner</th> */}
           <th>Application Status</th>
           <th>Application Link</th>
           <th>Company</th>
@@ -76,39 +92,41 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><strong>Aries Vitalista</strong></td>
+      {cvData.map((row) => (
+        <tr key={row.id}> {/* Assuming each CV has a unique id */}
+          {/* <td><strong>{row.owner}</strong></td> */}
           <td>
-            <select>
-              <option value="PENDING">Pending</option>
-              <option value="APPROVED">Approved</option>
-              <option value="REJECTED">Rejected</option>
-            </select>
+            <input value={row.application_status}
+             onChange={(e) => setLink(e.target.value)}
+            />
           </td>
           <td>
             <input
               type="text"
-              value={link}
-              onChange={handleLinkChange}
+              value={row.application_link}
+              onChange={(e) => setLink(e.target.value)} // Update state for link (if needed)
             />
-            <a href={link}>&rarr;</a>
+            <a href={row.link}>&rarr;</a>
           </td>
           <td>
-            <input type="text" 
-            value={Company}
-            onChange={handleCompanyChange}
+            <input
+              type="text"
+              value={row.company}
+              onChange={(e) => setCompany(e.target.value)} // Update state for company (if needed)
             />
           </td>
           <td>
             <div className="flex">
-              <a onClick={goToEditCV}>view</a>
+              <a onClick={() => goToEditCV(row.id)}>view</a>
               <a>print</a>
               <a>duplicate</a>
               <a>archive</a>
             </div>
           </td>
         </tr>
-      </tbody>
+  ))}
+</tbody>
+
     </TableStyle>
   );
 }

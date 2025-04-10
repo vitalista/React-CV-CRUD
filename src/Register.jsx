@@ -31,7 +31,7 @@ function Register() {
 
     try {
       // Step 1: Get CSRF cookie
-      await axios.get('http://localhost:8000/sanctum/csrf-cookie');
+      // await axios.get('http://localhost:8000/sanctum/csrf-cookie');
 
       // Step 2: Register
       const response = await axios.post('http://localhost:8000/api/register', formData);
@@ -39,7 +39,7 @@ function Register() {
 
       if (response.status === 200) {
         navigate('/');
-        console.log('Registration successful:', response.data.message);
+        console.log(response.data.message);
       }
 
       // navigate('/');

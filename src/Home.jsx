@@ -30,7 +30,7 @@ function Home() {
         )}
         {path === "/cv/add" && <AddCV />}
         {path === "/cv/edit" && <EditCV />}
-        {path === "/home" && <SkeletonLoader/>}
+        {/* {path === "/home" && <SkeletonLoader/>} */}
       </Card>
     </HomeDiv>
   );
