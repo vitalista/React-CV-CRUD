@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SidebarStyle = styled.div`
   width: 250px;
@@ -33,19 +34,52 @@ const SidebarStyle = styled.div`
     margin-bottom: 15px;
   }
 
-  nav ul li a {
+  nav ul li a,
+  nav ul li button {
     color: #ecf0f1;
     text-decoration: none;
     font-size: 1.1rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
     transition: color 0.3s ease;
   }
 
-  nav ul li a:hover {
+  nav ul li a:hover,
+  nav ul li button:hover {
     color: #3498db;
   }
 `;
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      await axios.post('http://localhost:8000/api/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+  
+      localStorage.removeItem('token'); // Clear the token
+      navigate('/'); // Redirect to login or home
+    } catch (error) {
+      if (error.response) {
+        console.error('Logout failed:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error:', error.message);
+      }
+    }
+  };
+  
+
   return (
     <SidebarStyle>
       <h2>Laravel-React</h2>
@@ -54,7 +88,7 @@ function Sidebar() {
           <li><Link to="/">Login</Link></li>
           <li><Link to="/register">Register</Link></li>
           <li><Link to="/cv/list">CV list</Link></li>
-          <li><Link to="/logout">Logout</Link></li>
+          <li><button onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>
     </SidebarStyle>
