@@ -87,7 +87,7 @@ function Sidebar() {
         <ul>
           <li><Link to="/">Login</Link></li>
           <li><Link to="/register">Register</Link></li>
-          <li><Link to="/cv/list">CV list</Link></li>
+          <li><Link to="/cv/list">Application list</Link></li>
           <li><button onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>
