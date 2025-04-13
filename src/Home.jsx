@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { GlobalStyle, Card } from "./GlobalStyles";
 
 import Table from "./Components/Table/Table";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import AddCV from "./Components/CV/AddCV";
+import EditCV from "./Components/CV/EditCV";
 import SkeletonLoader from "./Components/Loader/SkeletonLoader";
 
 const HomeDiv = styled.div`
@@ -13,7 +14,17 @@ const HomeDiv = styled.div`
   width: 100%;
 `;
 function Home() {
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return <Navigate to="/" />;
+    }
+
+  const { id } = useParams();
   const path = window.location.pathname;
+
+  const regex = /\/cv\/edit\//;
+  const isCvEditPath = regex.test(path);
 
   return (
     <HomeDiv>
@@ -29,7 +40,7 @@ function Home() {
           </>
         )}
         {path === "/cv/add" && <AddCV />}
-        {path === "/cv/edit" && <EditCV />}
+        {isCvEditPath && <EditCV id={id} />}
         {/* {path === "/home" && <SkeletonLoader/>} */}
       </Card>
     </HomeDiv>
