@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
+import { Link, useParams, Navigate, useLocation } from "react-router-dom";
 import { GlobalStyle, Card } from "./GlobalStyles";
 
 import Table from "./Components/Table/Table";
@@ -21,10 +21,11 @@ function Home() {
     }
 
   const { id } = useParams();
-  const path = window.location.pathname;
+  const location = useLocation(); 
+  const path = location.pathname;
 
   const regex = /\/cv\/edit\//;
-  const isCvEditPath = regex.test(path);
+  const isCvEditPath = regex.test(path); // Check if it's the /cv/edit/:id path
 
   return (
     <HomeDiv>
@@ -33,15 +34,15 @@ function Home() {
       <Card>
         {path === "/cv/list" && (
           <>
-           <div className="flex end">
-           <Link to="/cv/add">Create</Link>
-           </div>
+            <div className="flex end">
+              <Link to="/cv/add">Create</Link>
+            </div>
             <Table />
           </>
         )}
         {path === "/cv/add" && <AddCV />}
         {isCvEditPath && <EditCV id={id} />}
-        {/* {path === "/home" && <SkeletonLoader/>} */}
+        {/* {path === "/home" && <SkeletonLoader />} */}
       </Card>
     </HomeDiv>
   );
