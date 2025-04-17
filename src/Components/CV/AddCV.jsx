@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/axiosInstance";
 
 function AddCV() {
   const navigate = useNavigate();
@@ -30,16 +30,7 @@ function AddCV() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/cv",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
+      const response = await api.post(`/api/cv`, formData);
       alert("CV submitted successfully!");
       navigate("/cv/list");
     } catch (error) {

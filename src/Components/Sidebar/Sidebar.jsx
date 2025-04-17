@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axiosInstance';
 
 const SidebarStyle = styled.div`
   width: 250px;
@@ -57,17 +57,11 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const token = localStorage.getItem('token');
   
     try {
-      await axios.post('http://localhost:8000/api/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-  
+      await api.post('/api/logout', {});
       localStorage.removeItem('token'); // Clear the token
-      navigate('/'); // Redirect to login or home
+      navigate('/'); // Redirect to login
     } catch (error) {
       if (error.response) {
         console.error('Logout failed:', error.response.data);
@@ -82,7 +76,7 @@ function Sidebar() {
 
   return (
     <SidebarStyle>
-      <h2>Laravel-React</h2>
+      <h2>CV Crud</h2>
       <nav>
         <ul>
           <li><Link to="/">Login</Link></li>

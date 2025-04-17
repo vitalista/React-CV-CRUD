@@ -4,8 +4,6 @@ import axios from 'axios';
 import AuthButton from './Components/Buttons/AuthButton';
 import { GlobalStyle, MainContent, FormContainer, FooterText } from './GlobalStyles';
 
-axios.defaults.withCredentials = true; // Required for Sanctum cookie-based auth
-
 function Register() {
   const navigate = useNavigate();
 
@@ -30,11 +28,7 @@ function Register() {
     setError(null);
 
     try {
-      // Step 1: Get CSRF cookie
-      // await axios.get('http://localhost:8000/sanctum/csrf-cookie');
-
-      // Step 2: Register
-      const response = await axios.post('http://localhost:8000/api/register', formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/register`, formData);
 
 
       if (response.status === 200) {
@@ -42,11 +36,11 @@ function Register() {
         console.log(response.data.message);
       }
 
-      // navigate('/');
     } catch (err) {
       if (err.response && err.response.data) {
         setError(err.response.data.message || 'Something went wrong');
       } else {
+        console.error(err);
         setError('Registration failed. Please try again.');
       }
     }

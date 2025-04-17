@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axiosInstance';
 import PrintButton from '../Buttons/PrintButton';
 
 function EditCV({ id }) {
@@ -18,11 +18,7 @@ function EditCV({ id }) {
     useEffect(() => {
         const fetchCvData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/cv/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+                const response = await api.get(`/api/cv/${id}`);
                 setCvData(response.data.data);
             } catch (error) {
                 console.error('Error fetching CV data:', error);
@@ -48,11 +44,7 @@ function EditCV({ id }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8000/api/cv/${id}`, cvData, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
+            await api.put(`/api/cv/${id}`, cvData);
             alert('CV updated successfully');
         } catch (error) {
             console.error('Error updating CV:', error);
@@ -199,7 +191,7 @@ function EditCV({ id }) {
                         required></textarea>
                     </div>
 
-                    <button type="submit" className="submit-btn">Submit CV</button>
+                    <button type="submit" className="submit-btn">Update CV</button>
                 </form>
 
                 <div className="form-footer">

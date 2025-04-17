@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axiosInstance";
 
 const TableStyle = styled.table`
   width: 100%;
@@ -65,11 +65,7 @@ function Table() {
 
   const fetchCvData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/applications", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await api.get("/api/applications");
       setCvData(response.data.data);
     } catch (error) {
       console.error("Error fetching CV data:", error);
@@ -98,11 +94,9 @@ function Table() {
     };
     
     try {
-      await axios.put(`http://localhost:8000/api/applications/${id}`, requestBody, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+
+      await api.put(`/api/applications/${id}`, requestBody);
+
       alert("Changes saved!");
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
@@ -128,11 +122,7 @@ function Table() {
     };
 
     try {
-      await axios.post("http://localhost:8000/api/applications", requestBody, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await api.post("/api/applications", requestBody);
       fetchCvData();
       alert("Application duplicated successfully!");
     } catch (error) {
@@ -158,11 +148,7 @@ function Table() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/applications/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await api.delete(`/api/applications/${id}`);
       setCvData((prevData) => prevData.filter((item) => item.id !== id));
     } catch (error) {
       console.error("Error archiving application:", error);
@@ -199,6 +185,7 @@ function Table() {
                 type="text"
                 value={row.application_link || ""}
                 onChange={(e) => handleFieldChange(row.id, "application_link", e.target.value)}
+                placeholder="https://example.com"
               />
               <a target="_blank" href={row.application_link} rel="noopener noreferrer">
                 &rarr;
