@@ -1,66 +1,9 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 
-const TableStyle = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-
-  th,
-  td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-
-  th {
-    background-color: #f4f4f4;
-  }
-
-  tr:hover {
-    background-color: #f9f9f9;
-  }
-
-  td a {
-    margin-right: 10px;
-  }
-
-  td input,
-  td select {
-    border: none;
-    border-bottom: 1px solid #ddd;
-    outline: none;
-    padding: 5px 0;
-    background: transparent;
-  }
-
-  td input:focus {
-    border-bottom: 2px solid #3498db;
-  }
-
-  td a {
-    margin-left: 10px;
-    cursor: pointer;
-  }
-
-  td a.archive {
-    color: tomato;
-  }
-
-  td a.save {
-    color: seagreen;
-  }
-
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-`;
-
-
 function Table() {
   const navigate = useNavigate();
-
   const [cvData, setCvData] = useState([]);
 
   const fetchCvData = async () => {
@@ -92,22 +35,18 @@ function Table() {
       company: application.company,
       cv_id: application.cv_id,
     };
-    
+
     try {
-
       await api.put(`/api/applications/${id}`, requestBody);
-
       alert("Changes saved!");
     } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status < 500) {
-        console.error("Client-side error:", error.response);
-        alert("There was an issue with the request. Please check the format and try again.");
-      } else if (error.response && error.response.status >= 500 && error.response.status < 600) {
-        console.error("Server-side error:", error.response);
-        alert("Oops! Something went wrong on the server. Please try again later.");
+      const status = error.response?.status;
+      if (status >= 400 && status < 500) {
+        alert("Client-side error. Please check your data.");
+      } else if (status >= 500) {
+        alert("Server error. Please try again later.");
       } else {
-        console.error("Error saving changes:", error);
-        alert("It seems like the format you used isn’t quite right. Could you please try again?");
+        alert("Unexpected error. Please try again.");
       }
     }
   };
@@ -126,15 +65,13 @@ function Table() {
       fetchCvData();
       alert("Application duplicated successfully!");
     } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status < 500) {
-        console.error("Client-side error:", error.response);
-        alert("There was an issue with the request. Please check the format and try again.");
-      } else if (error.response && error.response.status >= 500 && error.response.status < 600) {
-        console.error("Server-side error:", error.response);
-        alert("Oops! Something went wrong on the server. Please try again later.");
+      const status = error.response?.status;
+      if (status >= 400 && status < 500) {
+        alert("Client-side error. Please check your data.");
+      } else if (status >= 500) {
+        alert("Server error. Please try again later.");
       } else {
-        console.error("Error duplicating application:", error);
-        alert("It seems like the format you used isn’t quite right. Could you please try again?");
+        alert("Unexpected error. Please try again.");
       }
     }
   };
@@ -144,74 +81,112 @@ function Table() {
   };
 
   const handleArchive = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to archive?");
-    if (!confirmDelete) return;
+    if (!window.confirm("Are you sure you want to archive?")) return;
 
     try {
       await api.delete(`/api/applications/${id}`);
       setCvData((prevData) => prevData.filter((item) => item.id !== id));
     } catch (error) {
-      console.error("Error archiving application:", error);
       alert("Failed to archive the application.");
     }
   };
 
   return (
-    <TableStyle>
-      <thead>
-        <tr>
-          <th>Owner</th>
-          <th>Application Status</th>
-          <th>Application Link</th>
-          <th>Company</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {cvData.map((row) => (
-          <tr key={row.id}>
-            <td>
-              <input value={row.cvs?.full_name || ""} readOnly disabled />
-            </td>
-            <td>
-              <input
-                value={row.application_status || ""}
-                onChange={(e) => handleFieldChange(row.id, "application_status", e.target.value)}
-              />
-             
-            </td>
-            <td>
-              <input
-                type="text"
-                value={row.application_link || ""}
-                onChange={(e) => handleFieldChange(row.id, "application_link", e.target.value)}
-                placeholder="https://example.com"
-              />
-              <a target="_blank" href={row.application_link} rel="noopener noreferrer">
-                &rarr;
-              </a>
-            </td>
-            <td>
-              <input
-                type="text"
-                value={row.company || ""}
-                onChange={(e) => handleFieldChange(row.id, "company", e.target.value)}
-              />
-            </td>
-            <td>
-              <div className="flex">
-                <a onClick={() => goToEditCV(row.cv_id)}>view</a>
-                <a onClick={() => duplicate(row.id)}>duplicate</a>
-                <a className="save" onClick={() => saveChanges(row.id)}>save</a>
-                <a className="archive" onClick={() => handleArchive(row.id)}>
-                  archive
-                </a>
-              </div>
-            </td>
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="p-3 text-left border-b border-gray-300">Owner</th>
+            <th className="p-3 text-left border-b border-gray-300">Application Status</th>
+            <th className="p-3 text-left border-b border-gray-300">Application Link</th>
+            <th className="p-3 text-left border-b border-gray-300">Company</th>
+            <th className="p-3 text-left border-b border-gray-300">Action</th>
           </tr>
-        ))}
-      </tbody>
-    </TableStyle>
+        </thead>
+        <tbody>
+          {cvData.map((row) => (
+            <tr key={row.id} className="hover:bg-gray-50">
+              <td className="p-3 border-b border-gray-200">
+                <input
+                  className="bg-transparent text-sm border-b border-gray-300 outline-none py-1 m-0 border-0 border-b px-0 w-full"
+                  value={row.cvs?.full_name || ""}
+                  readOnly
+                  disabled
+                />
+              </td>
+              <td className="p-3 border-b border-gray-200">
+                <input
+                  className="bg-transparent text-sm border-b border-gray-300 outline-none py-1 m-0 border-0 border-b px-0 w-full focus:border-[#3498db]"
+                  value={row.application_status || ""}
+                  onChange={(e) =>
+                    handleFieldChange(row.id, "application_status", e.target.value)
+                  }
+                />
+              </td>
+              <td className="p-3 border-b border-gray-200">
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    className="bg-transparent text-sm border-b border-gray-300 outline-none py-1 m-0 border-0 border-b px-0 w-full focus:border-[#3498db]"
+                    value={row.application_link || ""}
+                    onChange={(e) =>
+                      handleFieldChange(row.id, "application_link", e.target.value)
+                    }
+                    placeholder="https://example.com"
+                  />
+                  <a
+                    className="ml-2 text-[#3498db] cursor-pointer text-sm"
+                    target="_blank"
+                    href={row.application_link}
+                    rel="noopener noreferrer"
+                  >
+                    →
+                  </a>
+                </div>
+              </td>
+              <td className="p-3 border-b border-gray-200">
+                <input
+                  type="text"
+                  className="bg-transparent text-sm border-b border-gray-300 outline-none py-1 m-0 border-0 border-b px-0 w-full focus:border-[#3498db]"
+                  value={row.company || ""}
+                  onChange={(e) =>
+                    handleFieldChange(row.id, "company", e.target.value)
+                  }
+                />
+              </td>
+              <td className="p-3 border-b border-gray-200">
+                <div className="flex space-x-3 text-md">
+                  <a
+                    onClick={() => goToEditCV(row.cv_id)}
+                    className="text-[#3498db] cursor-pointer"
+                  >
+                    view
+                  </a>
+                  <a
+                    onClick={() => duplicate(row.id)}
+                    className="text-[#3498db] cursor-pointer"
+                  >
+                    duplicate
+                  </a>
+                  <a
+                    onClick={() => saveChanges(row.id)}
+                    className="text-[seagreen] cursor-pointer"
+                  >
+                    save
+                  </a>
+                  <a
+                    onClick={() => handleArchive(row.id)}
+                    className="text-[tomato] cursor-pointer"
+                  >
+                    archive
+                  </a>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

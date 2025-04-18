@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+@layer base {
+@import 'normalize.css';
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #333;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 20px;
+  margin: 30px;
+  overflow-y: auto;
+}
+
+a{
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  line-height: 10px;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+  color: #333;
+}
+
+input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+}

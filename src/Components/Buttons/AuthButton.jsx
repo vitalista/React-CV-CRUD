@@ -1,28 +1,11 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
 
-const Button = styled.button`
-
-    width: 100%;
-    padding: 12px 30px;
-    background-color: #3498db;
-    color: #fff;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-  &:hover {
-      background-color: #2980b9;
-  }
-
-`;
-
-function AuthButton({label}) {
+function AuthButton({ label }) {
   return (
-    <Button>{ label }</Button>
-  )
+    <button className="w-full px-[30px] py-[12px] bg-[#3498db] text-white text-[1.1rem] border-none rounded-full cursor-pointer transition-colors duration-300 hover:bg-[#2980b9]">
+      {label}
+    </button>
+  );
 }
 
-export default AuthButton
+export default AuthButton;

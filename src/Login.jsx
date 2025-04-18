@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthButton from './Components/Buttons/AuthButton';
-import { GlobalStyle, MainContent, FormContainer, FooterText } from './GlobalStyles';
 
 function Login() {
   const navigate = useNavigate();
@@ -40,9 +39,8 @@ function Login() {
 
   return (
     <>
-      <GlobalStyle/>
-      <MainContent>
-        <FormContainer>
+      <div className='flex items-center justify-center h-screen w-screen'>
+        <div className='w-full max-w-[400px] p-[30px] bg-white rounded-[10px] shadow-[0_10px_20px_rgba(0,0,0,0.1)]'>
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <input
@@ -64,13 +62,13 @@ function Login() {
             <AuthButton label="Login"/>
             {error && <p style={{ color: 'red' }}>{error}</p>}
           </form>
-          <FooterText>
+          <div className='mt-5 text-center text-[#777]'>
             <p>
-              Don't have an account? <a onClick={goToRegister}>Register here</a>
+              Don't have an account? <a className='text-[#3498db] no-underline cursor-pointer' onClick={goToRegister}>Register here</a>
             </p>
-          </FooterText>
-        </FormContainer>
-      </MainContent>
+          </div >
+        </div>
+        </div>
     </>
   );
 }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthButton from './Components/Buttons/AuthButton';
-import { GlobalStyle, MainContent, FormContainer, FooterText } from './GlobalStyles';
 
 function Register() {
   const navigate = useNavigate();
@@ -52,9 +51,8 @@ function Register() {
 
   return (
     <>
-      <GlobalStyle />
-      <MainContent>
-        <FormContainer>
+      <div className='flex items-center justify-center h-screen w-screen'>
+        <div className='w-full max-w-[400px] p-[30px] bg-white rounded-[10px] shadow-[0_10px_20px_rgba(0,0,0,0.1)]'>
           <h2>Register</h2>
           <form onSubmit={handleSubmit}>
             <input
@@ -98,13 +96,13 @@ function Register() {
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
-          <FooterText>
+          <div className='mt-5 text-center text-[#777]'>
             <p>
-              Already have an account? <a onClick={goToLogin} style={{ cursor: 'pointer' }}>Login here</a>
+              Already have an account? <a className='text-[#3498db] no-underline cursor-pointer' onClick={goToLogin} style={{ cursor: 'pointer' }}>Login here</a>
             </p>
-          </FooterText>
-        </FormContainer>
-      </MainContent>
+          </div>
+        </div>
+        </div>
     </>
   );
 }
