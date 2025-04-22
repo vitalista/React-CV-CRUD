@@ -126,7 +126,7 @@ function Table() {
               <td className="p-3 border-b border-gray-200">
                 <div className="flex items-center">
                   <input
-                    type="text"
+                    type="url"
                     className="bg-transparent text-sm border-b border-gray-300 outline-none py-1 m-0 border-0 border-b px-0 w-full focus:border-[#3498db]"
                     value={row.application_link || ""}
                     onChange={(e) =>
